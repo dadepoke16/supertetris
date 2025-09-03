@@ -380,10 +380,11 @@ export default class GameScene extends Phaser.Scene {
       }
     }
 
-    // Highlight target subgrid and valid moves
+    // Highlight target subgrid and valid moves (color depends on current player)
+    const playerColor = pub.currentPlayer === 'X' ? 0x22d3ee : 0xf472b6
     const targets = pub.validTargets
     for (const t of targets) {
-      this._emphasizeSubgrid(t.row, t.col, 0xf59e0b)
+      this._emphasizeSubgrid(t.row, t.col, playerColor)
     }
 
     const validMoves = this.state.getValidMoves()
@@ -396,7 +397,9 @@ export default class GameScene extends Phaser.Scene {
             const rect = this.cells[MR][MC][r][c]
             const key = `${MR}${MC}${r}${c}`
             const can = allowed.has(key)
-            rect.setAlpha(can ? 0.12 : 0.03)
+            // Use playerColor for valid cell tint; lower alpha when not valid
+            rect.setFillStyle(playerColor, can ? 0.12 : 0.03)
+            rect.setStrokeStyle(1, playerColor, can ? 0.4 : 0.1)
             rect.setInteractive({ useHandCursor: can })
             rect.input && (rect.input.enabled = can)
           }
@@ -543,7 +546,8 @@ export default class GameScene extends Phaser.Scene {
   _onHoverCell(MR, MC, r, c, inside) {
     const rect = this.cells[MR][MC][r][c]
     if (!rect.input || !rect.input.enabled) return
-    rect.setStrokeStyle(inside ? 3 : 1, 0x00ff88, inside ? 1 : 0.3)
+    const playerColor = this.state.currentPlayer === 'X' ? 0x22d3ee : 0xf472b6
+    rect.setStrokeStyle(inside ? 3 : 1, playerColor, inside ? 1 : 0.3)
   }
 
   _onClickCell(MR, MC, r, c) {
