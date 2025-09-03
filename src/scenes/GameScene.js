@@ -146,9 +146,11 @@ export default class GameScene extends Phaser.Scene {
       fontSize: '24px',
       color: '#ffffff'
     })
+    this.ui.statusText.setDepth(1100)
 
     // Create a compact menu icon (hamburger) in the top-left of the canvas
     this.ui.menuIcon = this._createIconButton(12, 12, () => this._toggleMenu())
+    this.ui.menuIcon.setDepth(1100)
 
     // Create a panel that will hold the action buttons (hidden by default)
     this.ui.menuPanel = this.add.container(0, 0)
@@ -177,14 +179,17 @@ export default class GameScene extends Phaser.Scene {
     panelBg.height = by + panelPad
 
     this.ui.menuPanel.setVisible(false)
+    this.ui.menuPanel.setDepth(1100)
 
     // Rules panel (hidden by default)
     this.ui.rulesPanel = this._createRulesPanel()
     this.ui.rulesPanel.setVisible(false)
+    this.ui.rulesPanel.setDepth(1200)
 
     // Final banner
     this.ui.finalBanner = this._createFinalBanner()
     this.ui.finalBanner.setVisible(false)
+    this.ui.finalBanner.setDepth(1300)
 
     this._layoutHUD()
   }
