@@ -525,6 +525,9 @@ export default class GameScene extends Phaser.Scene {
     const { x, y } = this._subgridCenter(MR, MC)
     if (prev) {
       prev.setText(val).setPosition(x, y)
+      // Ensure color reflects current owner (flip supported)
+      prev.setStyle({ color: val === 'X' ? '#22d3ee' : '#f472b6', fontStyle: 'bold' })
+      prev.setAlpha(0.9)
       return
     }
     const mark = this.add.text(x, y, val, {
