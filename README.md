@@ -95,4 +95,4 @@ Nota: Nel file `vite.config.js` la proprietà `base` è impostata a `./` per ave
 - Undo/Redo mosse (pulsanti nell’HUD).
 
 ## Licenza
-MIT (se desideri un’altra licenza, modifica questo file).
+MIT
