@@ -20,6 +20,7 @@
 import './style.css'
 import Phaser from 'phaser'
 import GameScene from './scenes/GameScene.js'
+import SplashScene from './scenes/SplashScene.js'
 
 const config = {
   type: Phaser.AUTO,
@@ -32,7 +33,7 @@ const config = {
     height: 720,
   },
   physics: { default: 'arcade', arcade: { debug: false } },
-  scene: [GameScene],
+  scene: [SplashScene, GameScene],
 }
 
 new Phaser.Game(config)
