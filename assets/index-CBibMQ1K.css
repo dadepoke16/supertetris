@@ -1,0 +1,18 @@
+/*
+ * Xeader Studios
+ *
+ * NOTICE OF LICENCE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt
+ * It is also available through th world-wide-web at this URL:
+ * https://xeader.com/LICENCE-CE.txt
+ *
+ * @category supertris
+ * @package supertris
+ *
+ * @author Antonio Gatta <a.gatta@xeader.com>
+ * @url http://xeader.com
+ * @copyright Copyright (c) 2025 Xeader Studios
+ * @license All right reserved
+ */html,body,#app{width:100%;height:100dvh;margin:0;padding:0;overflow:hidden}body{background:radial-gradient(1200px 600px at 50% 0%,#1f2937,#0b1020 60%,#05070f);color:#e5e7eb;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-user-select:none;user-select:none;touch-action:manipulation}#app>canvas{display:block}
