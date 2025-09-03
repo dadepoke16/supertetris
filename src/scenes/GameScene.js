@@ -37,6 +37,10 @@ export default class GameScene extends Phaser.Scene {
     this.gridGfx = this.add.graphics()
     this.highlightGfx = this.add.graphics()
     this.overlayGfx = this.add.graphics()
+    // Ensure highlight layer is above marks and overlays
+    this.gridGfx.setDepth(100)
+    this.overlayGfx.setDepth(200)
+    this.highlightGfx.setDepth(1005)
 
     // Build interactive cells and texts
     this._buildBoard()
@@ -376,7 +380,7 @@ export default class GameScene extends Phaser.Scene {
     // Highlight target subgrid and valid moves
     const targets = pub.validTargets
     for (const t of targets) {
-      this._strokeSubgrid(t.row, t.col, 0xf59e0b, 3, 0.9)
+      this._emphasizeSubgrid(t.row, t.col, 0xf59e0b)
     }
 
     const validMoves = this.state.getValidMoves()
@@ -395,6 +399,12 @@ export default class GameScene extends Phaser.Scene {
           }
         }
       }
+    }
+
+    // Last move halo
+    if (pub.lastMove) {
+      const lm = pub.lastMove
+      this._drawLastMoveHalo(lm.mainR, lm.mainC, lm.r, lm.c, lm.player)
     }
 
     // Final banner if game over
@@ -444,6 +454,19 @@ export default class GameScene extends Phaser.Scene {
     this.highlightGfx.strokeRect(x + 2, y + 2, subgridSize - 4, subgridSize - 4)
   }
 
+  // Strong emphasis for a target subgrid: soft fill + thick outline
+  _emphasizeSubgrid(MR, MC, color) {
+    const { originX, originY, subgridSize } = this.layout
+    const x = originX + MC * subgridSize
+    const y = originY + MR * subgridSize
+    // soft fill slightly inside the cell using overlay layer (tints content)
+    this.overlayGfx.fillStyle(color, 0.08)
+    this.overlayGfx.fillRect(x + 3, y + 3, subgridSize - 6, subgridSize - 6)
+    // thick outline on highlight layer
+    this.highlightGfx.lineStyle(8, color, 1)
+    this.highlightGfx.strokeRect(x + 2, y + 2, subgridSize - 4, subgridSize - 4)
+  }
+
   _drawHatchSubgrid(MR, MC) {
     const { originX, originY, subgridSize } = this.layout
     const x = originX + MC * subgridSize
@@ -456,6 +479,18 @@ export default class GameScene extends Phaser.Scene {
       g.strokeLineShape(new Phaser.Geom.Line(x + i, y, x, y + i))
       g.strokeLineShape(new Phaser.Geom.Line(x + subgridSize, y + i, x + i, y + subgridSize))
     }
+  }
+
+  _drawLastMoveHalo(MR, MC, r, c, player) {
+    const { x, y } = this._cellCenter(MR, MC, r, c)
+    const radius = Math.max(8, Math.floor(this.layout.cellSize * 0.42))
+    const color = player === 'X' ? 0x22d3ee : 0xf472b6
+    // Outer colored ring
+    this.highlightGfx.lineStyle(8, color, 0.95)
+    this.highlightGfx.strokeCircle(x, y, radius)
+    // Inner white ring for contrast
+    this.highlightGfx.lineStyle(2, 0xffffff, 0.85)
+    this.highlightGfx.strokeCircle(x, y, Math.max(4, radius - 5))
   }
 
   _setSmallMark(MR, MC, r, c, val) {

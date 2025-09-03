@@ -47,6 +47,7 @@ export class GameState {
     this.currentPlayer = startingPlayer
     this.target = null // { row, col } for next required subgrid, or null for free choice
     this.winner = null // 'X' | 'O' | 'D' for global result, or null while playing
+    this.lastMove = null // { mainR, mainC, r, c, player }
 
     // history for undo/redo (store snapshots)
     this._history = []
@@ -76,6 +77,7 @@ export class GameState {
       target: this.target ? { ...this.target } : null,
       winner: this.winner,
       validTargets: this.getValidTargets(),
+      lastMove: this.lastMove ? { ...this.lastMove } : null,
     }
   }
 
@@ -91,6 +93,7 @@ export class GameState {
       currentPlayer: this.currentPlayer,
       target: this.target,
       winner: this.winner,
+      lastMove: this.lastMove,
     })
   }
 
@@ -106,6 +109,7 @@ export class GameState {
     this.currentPlayer = s.currentPlayer
     this.target = s.target
     this.winner = s.winner
+    this.lastMove = s.lastMove || null
   }
 
   undo() {
@@ -208,6 +212,9 @@ export class GameState {
     const sg = this.sub[mainR][mainC]
     sg.cells[r][c] = this.currentPlayer
     sg.moves += 1
+
+    // Track last move for UI highlighting
+    this.lastMove = { mainR, mainC, r, c, player: this.currentPlayer }
 
     // Check subgrid win/draw
     const won = this._checkThreeInRow(sg.cells, this.currentPlayer)
