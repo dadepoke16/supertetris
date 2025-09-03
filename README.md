@@ -41,6 +41,7 @@ Prerequisiti: Node.js >= 18
 - Due giocatori locali: X (inizia sempre) e O.
 - Regola di indirizzamento: la casella piccola in cui giochi (riga/colonna) determina la sottogriglia in cui l’avversario dovrà giocare al turno successivo.
 - Conquista di una sottogriglia: facendo tris in un mini‑tris, la relativa cella della griglia principale viene conquistata (overlay X/O grande).
+- Nuova regola: se un giocatore realizza un secondo tris all’interno di una sottogriglia già conquistata dall’avversario, la proprietà della cella grande si ribalta e passa al nuovo vincitore. È consentito continuare a giocare nelle sottogriglie conquistate finché non sono piene o in pareggio.
 - Pareggio di sottogriglia: se il mini‑tris è pieno senza tris, la cella grande resta bloccata (mostrata con tratteggio).
 - Target bloccato: se la sottogriglia bersaglio è già conquistata o piena, si può giocare in qualunque sottogriglia disponibile.
 - Vittoria: vince chi completa un tris sulla griglia principale.

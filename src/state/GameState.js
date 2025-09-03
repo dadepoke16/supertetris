@@ -155,7 +155,8 @@ export class GameState {
     }
 
     const sg = this.sub[mainR][mainC]
-    if (sg.winner) return { ok: false, reason: 'Sottogriglia bloccata' }
+    // Block only if subgrid is not playable (full or DRAW), not simply because it has an owner
+    if (!this._isSubgridPlayable(mainR, mainC)) return { ok: false, reason: 'Sottogriglia non disponibile' }
     if (sg.cells[r][c] !== EMPTY) return { ok: false, reason: 'Casella occupata' }
 
     // target rule
@@ -166,9 +167,7 @@ export class GameState {
       }
     } else {
       // target blocked or not set: any playable subgrid is fine
-      if (!this._isSubgridPlayable(mainR, mainC)) {
-        return { ok: false, reason: 'Sottogriglia non disponibile' }
-      }
+      // already checked playability above
     }
 
     return { ok: true }
@@ -187,7 +186,7 @@ export class GameState {
         const key = `${MR},${MC}`
         if (!allowed.has(key)) continue
         const sg = this.sub[MR][MC]
-        if (sg.winner) continue
+        if (!this._isSubgridPlayable(MR, MC)) continue
         for (let r = 0; r < 3; r++) {
           for (let c = 0; c < 3; c++) {
             if (sg.cells[r][c] === EMPTY) moves.push({ mainR: MR, mainC: MC, r, c })
@@ -219,11 +218,24 @@ export class GameState {
     // Check subgrid win/draw
     const won = this._checkThreeInRow(sg.cells, this.currentPlayer)
     if (won) {
+      // New tris always assigns/flip ownership to the current player
       sg.winner = this.currentPlayer
       this.main[mainR][mainC] = this.currentPlayer
     } else if (sg.moves === 9) {
-      sg.winner = DRAW
-      this.main[mainR][mainC] = DRAW // mark blocked
+      // On full subgrid: if any tris exists, keep/assign ownership; otherwise, mark DRAW
+      const xWin = this._checkThreeInRow(sg.cells, PLAYER_X)
+      const oWin = this._checkThreeInRow(sg.cells, PLAYER_O)
+      if (xWin || oWin) {
+        if (!sg.winner) {
+          sg.winner = xWin && !oWin ? PLAYER_X : (!xWin && oWin ? PLAYER_O : sg.winner)
+        }
+        if (sg.winner === PLAYER_X || sg.winner === PLAYER_O) {
+          this.main[mainR][mainC] = sg.winner
+        }
+      } else {
+        sg.winner = DRAW
+        this.main[mainR][mainC] = DRAW // mark blocked
+      }
     }
 
     // Check global win/draw on main board
@@ -273,9 +285,10 @@ export class GameState {
   }
 
   _allMainResolved() {
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 3; c++) {
-        if (this.main[r][c] === EMPTY) return false
+    // Global draw only if no subgrid is playable anymore (i.e., all full or DRAW)
+    for (let R = 0; R < 3; R++) {
+      for (let C = 0; C < 3; C++) {
+        if (this._isSubgridPlayable(R, C)) return false
       }
     }
     return true
@@ -285,8 +298,8 @@ export class GameState {
 
   _isSubgridPlayable(R, C) {
     const sg = this.sub[R][C]
-    if (sg.winner) return false
-    return sg.moves < 9
+    // Play is allowed until the subgrid is full; DRAW blocks further play.
+    return sg.moves < 9 && sg.winner !== DRAW
   }
 
   _checkThreeInRow(cells, player) {

@@ -284,8 +284,8 @@ export default class GameScene extends Phaser.Scene {
       '• Ogni cella grande contiene un mini-tris.\n' +
       '• La tua mossa determina la sottogriglia bersaglio del tuo avversario (coordinate della casella piccola → sottogriglia).\n' +
       '• Conquista una sottogriglia facendo tris: quella cella grande diventa tua.\n' +
+      '• Se fai tris in una sottogriglia già conquistata dall’avversario, la proprietà della cella grande si ribalta e passa a te. È possibile continuare a giocare nelle sottogriglie conquistate finché non sono piene.\n' +
       '• Se il mini-tris pareggia, la cella grande resta bloccata.\n' +
-      '• Se il bersaglio è bloccato, puoi giocare ovunque disponibile.\n' +
       '• Vince chi fa tris nella griglia principale.\n' +
       '\n' +
       'Questo gioco è stato creato da Davide Gatta (DadePoke16).\n' +
