@@ -286,7 +286,10 @@ export default class GameScene extends Phaser.Scene {
       '• Conquista una sottogriglia facendo tris: quella cella grande diventa tua.\n' +
       '• Se il mini-tris pareggia, la cella grande resta bloccata.\n' +
       '• Se il bersaglio è bloccato, puoi giocare ovunque disponibile.\n' +
-      '• Vince chi fa tris nella griglia principale.',
+      '• Vince chi fa tris nella griglia principale.\n' +
+      '\n' +
+      'Questo gioco è stato creato da Davide Gatta (DadePoke16).\n' +
+      '\n'  ,
       { fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Arial', fontSize: '16px', color: '#e5e7eb', wordWrap: { width: w - 32 } }
     ).setOrigin(0, 0)
 
