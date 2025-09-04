@@ -1,22 +1,3 @@
-/*
- * Xeader Studios
- *
- * NOTICE OF LICENCE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt
- * It is also available through th world-wide-web at this URL:
- * https://xeader.com/LICENCE-CE.txt
- *
- * @category supertris
- * @package supertris
- *
- * @author Antonio Gatta <a.gatta@xeader.com>
- * @url http://xeader.com
- * @copyright Copyright (c) 2025 Xeader Studios
- * @license All right reserved
- */
-
 // GameState.js - core logic for Super Tris (Ultimate Tic-Tac-Toe)
 // Pure JS (no Phaser), ES Modules. Keeps logic testable and separate from rendering.
 
